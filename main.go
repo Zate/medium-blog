@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"regexp"
 
-	medium "github.com/medium/medium-sdk-go"
 	yaml "gopkg.in/yaml.v2"
 )
 
@@ -77,19 +76,19 @@ func prettyPrintJSON(b []byte) ([]byte, error) {
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lmicroseconds | log.Lshortfile)
 	//log.Println("Medium Blog Bridge Coming Online ....")
-	var k apikeys
-	k.getAPIKeys(".secrets.yaml")
-	token := k.Token
+	// var k apikeys
+	// k.getAPIKeys(".secrets.yaml")
+	// token := k.Token
 
-	m := medium.NewClientWithAccessToken(token)
+	// m := medium.NewClientWithAccessToken(token)
 
-	u, err := m.GetUser("")
+	// u, err := m.GetUser("")
 
-	CheckErr(err)
+	// CheckErr(err)
 
 	//log.Println(u.Username)
 
-	p := GetPubs(u.Username)
+	p := GetPubs("zate75")
 
 	re := regexp.MustCompile("^]\\)}while\\(1\\);</x>{")
 	newContents := re.ReplaceAllString(string(p), "{")
