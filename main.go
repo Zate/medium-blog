@@ -3,9 +3,11 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"regexp"
 
 	medium "github.com/medium/medium-sdk-go"
 	yaml "gopkg.in/yaml.v2"
@@ -43,7 +45,7 @@ func GetPubs(uid string) (b []byte) {
 	//You can pass count parameter to limit the posts. Much easier to parse than RSS.
 	//keys := "Bearer " + token
 	c := &http.Client{}
-	r, err := http.NewRequest("GET", "https://medium.com/@"+uid+"/latest", nil)
+	r, err := http.NewRequest("GET", "https://medium.com/@"+uid+"/latest?format=json", nil)
 	CheckErr(err)
 	r.Header.Add("Accept", "application/json")
 	resp, err := c.Do(r)
@@ -89,8 +91,16 @@ func main() {
 
 	p := GetPubs(u.Username)
 
-	log.Println(string(p))
+	re := regexp.MustCompile("^]\\)}while\\(1\\);</x>{")
+	newContents := re.ReplaceAllString(string(p), "{")
 
+	// match, _ := regexp.MatchString("^]\\)}while\\(1\\);</x>{", string(p))
+	// log.Println(match)
+
+	//])}while(1);</x>
+
+	//log.Println(newContents)
+	fmt.Println(newContents)
 	// r := clientRequest{
 	// 	method: "GET",
 	// 	path:   fmt.Sprintf("/v1/users/%s/publications", userID),
